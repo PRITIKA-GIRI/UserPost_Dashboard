@@ -5,6 +5,7 @@ import { User } from "@/types";
 import { UserCard } from "./UserCard";
 import { SearchBar } from "./ui/SearchBar";
 import { useUsersStore } from "@/store";
+import { FiSearch } from "react-icons/fi";
 
 export function UsersListClient({ initialUsers }: { initialUsers: User[] }) {
   const { setUsers } = useUsersStore();
@@ -45,7 +46,7 @@ export function UsersListClient({ initialUsers }: { initialUsers: User[] }) {
       {/* User Grid */}
       {filteredUsers.length === 0 ? (
         <div className="text-center py-20">
-          <p className="text-4xl mb-3">🔍</p>
+          
           <p className="text-slate-500 font-medium">No users match your search.</p>
           <p className="text-slate-400 text-sm mt-1">
             Try searching by a different name or email.
