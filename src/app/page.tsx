@@ -1,9 +1,10 @@
 import { UsersListClient } from "@/components/UsersListClient";
 import { fetchUsers } from "@/lib/api";
+import { User } from "@/types";
 
 // SSR: fetch users on the server using Next.js Server Components
 export default async function HomePage() {
-  let users = [];
+  let users: User[] = [];
   let error: string | null = null;
 
   try {
