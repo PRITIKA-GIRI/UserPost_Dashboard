@@ -15,7 +15,6 @@ interface NewPostFormProps {
 export function NewPostForm({ userId }: NewPostFormProps) {
   const [isOpen, setIsOpen] = useState(false);
   const addPost = usePostsStore((s) => s.addPost);
-  // ✅ removed submitted state entirely
 
   const {
     register,
