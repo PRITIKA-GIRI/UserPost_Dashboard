@@ -6,6 +6,7 @@ import { newPostSchema, NewPostSchema } from "@/lib/validations";
 import { usePostsStore } from "@/store";
 import { Post } from "@/types";
 import { useState } from "react";
+import { toast } from "sonner"; 
 
 interface NewPostFormProps {
   userId: number;
@@ -13,8 +14,8 @@ interface NewPostFormProps {
 
 export function NewPostForm({ userId }: NewPostFormProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const addPost = usePostsStore((s) => s.addPost);
+  // ✅ removed submitted state entirely
 
   const {
     register,
@@ -33,11 +34,8 @@ export function NewPostForm({ userId }: NewPostFormProps) {
     };
     addPost(userId, newPost);
     reset();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setIsOpen(false);
-    }, 1500);
+    setIsOpen(false);
+    toast.success("Post added successfully!"); 
   };
 
   if (!isOpen) {
@@ -63,63 +61,55 @@ export function NewPostForm({ userId }: NewPostFormProps) {
         </button>
       </div>
 
-      {submitted ? (
-        <div className="text-center py-6 text-green-600 font-medium">
-          ✅ Post added successfully!
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col text-black gap-4">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Title <span className="text-red-500">*</span>
+          </label>
+          <input
+            {...register("title")}
+            placeholder="Enter post title"
+            className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${errors.title ? "border-red-400 bg-red-50" : "border-slate-200"
+              }`}
+          />
+          {errors.title && (
+            <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>
+          )}
         </div>
-      ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Title <span className="text-red-500">*</span>
-            </label>
-            <input
-              {...register("title")}
-              placeholder="Enter post title"
-              className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
-                errors.title ? "border-red-400 bg-red-50" : "border-slate-200"
-              }`}
-            />
-            {errors.title && (
-              <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>
-            )}
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Body <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              {...register("body")}
-              placeholder="Enter post body"
-              rows={4}
-              className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none ${
-                errors.body ? "border-red-400 bg-red-50" : "border-slate-200"
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Body <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            {...register("body")}
+            placeholder="Enter post body"
+            rows={4}
+            className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none ${errors.body ? "border-red-400 bg-red-50" : "border-slate-200"
               }`}
-            />
-            {errors.body && (
-              <p className="text-red-500 text-xs mt-1">{errors.body.message}</p>
-            )}
-          </div>
+          />
+          {errors.body && (
+            <p className="text-red-500 text-xs mt-1">{errors.body.message}</p>
+          )}
+        </div>
 
-          <div className="flex gap-3">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-medium rounded-lg transition-colors"
-            >
-              {isSubmitting ? "Saving..." : "Submit Post"}
-            </button>
-            <button
-              type="button"
-              onClick={() => { setIsOpen(false); reset(); }}
-              className="px-4 py-2.5 border border-slate-200 text-slate-600 text-sm rounded-lg hover:bg-slate-50 transition"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      )}
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-medium rounded-lg transition-colors"
+          >
+            {isSubmitting ? "Saving..." : "Submit Post"}
+          </button>
+          <button
+            type="button"
+            onClick={() => { setIsOpen(false); reset(); }}
+            className="px-4 py-2.5 border border-slate-200 text-slate-600 text-sm rounded-lg hover:bg-slate-50 transition"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

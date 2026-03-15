@@ -12,7 +12,7 @@ export function useUsers() {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    if (users.length > 0) return; // already loaded
+    if (users.length > 0) return;
     setApiIsLoading(true);
     fetchUsers()
       .then((data) => {

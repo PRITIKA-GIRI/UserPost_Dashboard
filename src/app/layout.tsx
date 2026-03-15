@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { FiUsers } from "react-icons/fi";
 import Link from "next/link";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "User & Posts Dashboard",
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-slate-50 min-h-screen">
+        <Toaster position="top-right" richColors />
         <nav className="bg-white border-b border-slate-200 px-6 py-8 sticky top-0 z-10 shadow-sm">
           <Link
             href="/"

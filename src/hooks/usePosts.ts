@@ -7,27 +7,27 @@ import { usePostsStore } from "@/store";
 const POSTS_PER_PAGE = 5;
 
 export function usePosts(userId: number) {
-  const { postsByUser, setPosts, getLocalPosts } = usePostsStore();
+  const { postsByUser, setPosts, getLocalPosts } = usePostsStore(); 
   const [apiIsLoading, setApiIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     setApiIsLoading(true);
+    setCurrentPage(1);
     const localPosts = getLocalPosts(userId);
+
     fetchPostsByUserId(userId)
       .then((data) => {
-        const merged = [...localPosts, ...data];
-        setPosts(userId, merged);
+        setPosts(userId, [...localPosts, ...data]); 
         setError(null);
       })
       .catch(() => setError("Something went wrong"))
       .finally(() => setApiIsLoading(false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
-  const allPosts = postsByUser[userId] ?? [];
-  const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+  const allPosts = postsByUser[userId] ?? []; 
+  const totalPages = Math.max(1, Math.ceil(allPosts.length / POSTS_PER_PAGE));
 
   const paginatedPosts = useMemo(() => {
     const start = (currentPage - 1) * POSTS_PER_PAGE;
