@@ -18,7 +18,7 @@ export const useUsersStore = create<UsersState>((set) => ({
   setUsers: (users) => set({ users }),
 }));
 
-export const usePostsStore = create<PostsState>((set, get) => ({
+export const usePostsStore = create<PostsState>((set) => ({
   postsByUser: {},
   setPosts: (userId, posts) =>
     set((state) => ({
